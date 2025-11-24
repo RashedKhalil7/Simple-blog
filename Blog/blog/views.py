@@ -5,6 +5,9 @@ from django.core.paginator import Paginator
 
 def post_list(request):
     posts = Post.Published.all()
+    paginator = Paginator(posts, 3)
+    post_page = request.GET.get('page' , 1)
+    posts = paginator.page(post_page)
     return render(request, 'blog/post/list.html' ,{'posts' : posts})
 
 
