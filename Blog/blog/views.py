@@ -9,12 +9,11 @@ from django.db.models import Count
 # Create your views here.
 
 def post_list(request , tag_slug=None):
-    post_list = Post.Published.all()
+    posts = Post.Published.all()
     tag = None
     if tag_slug:
         tag = get_object_or_404(Tag , slug=tag_slug)
-        post_list = post_list.filter(tags__in=[tag])
-    posts = Post.Published.all()
+        posts = posts.filter(tags__in=[tag])
     paginator = Paginator(posts, 3)
     post_page = request.GET.get('page' , 1)
     try:
@@ -24,7 +23,7 @@ def post_list(request , tag_slug=None):
     except PageNotAnInteger:
         posts = paginator.page(1)
     return render(request, 'blog/post/list.html' ,{'posts' : posts , 'tag':tag})
-    
+
 
 def post_detail(request , id):
     post = get_object_or_404(Post , id=id , status = Post.Status.PUBLISHED)
